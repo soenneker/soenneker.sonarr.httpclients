@@ -6,12 +6,12 @@ using Soenneker.Utils.HttpClientCache.Registrar;
 namespace Soenneker.Sonarr.HttpClients.Registrars;
 
 /// <summary>
-/// Registers the OpenAPI HttpClient wrapper for dependency injection.
+/// Registers the authenticated Sonarr HTTP client provider.
 /// </summary>
 public static class SonarrOpenApiHttpClientRegistrar
 {
     /// <summary>
-    /// Adds <see cref="SonarrOpenApiHttpClient"/> as a singleton service. <para/>
+    /// Adds the Sonarr HTTP client provider as a singleton service. <para/>
     /// </summary>
     public static IServiceCollection AddSonarrOpenApiHttpClientAsSingleton(this IServiceCollection services)
     {
@@ -22,7 +22,7 @@ public static class SonarrOpenApiHttpClientRegistrar
     }
 
     /// <summary>
-    /// Adds <see cref="SonarrOpenApiHttpClient"/> as a scoped service. <para/>
+    /// Adds the Sonarr HTTP client provider as a scoped service. Each scope owns a separate cached HTTP client. <para/>
     /// </summary>
     public static IServiceCollection AddSonarrOpenApiHttpClientAsScoped(this IServiceCollection services)
     {

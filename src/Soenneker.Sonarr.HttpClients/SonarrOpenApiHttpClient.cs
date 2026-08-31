@@ -11,11 +11,11 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Sonarr.HttpClients;
 
-///<inheritdoc cref="ISonarrOpenApiHttpClient"/>
 public sealed class SonarrOpenApiHttpClient : ISonarrOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
     private readonly IConfiguration _config;
+    private readonly string _cacheKey = $"{nameof(SonarrOpenApiHttpClient)}-{Guid.NewGuid():N}";
 
     private const string _prodBaseUrl = "http://localhost:8989";
 
@@ -27,7 +27,7 @@ public sealed class SonarrOpenApiHttpClient : ISonarrOpenApiHttpClient
 
     public ValueTask<HttpClient> Get(CancellationToken cancellationToken = default)
     {
-        return _httpClientCache.Get(nameof(SonarrOpenApiHttpClient), (config: _config, baseUrl: _config["Sonarr:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
+        return _httpClientCache.Get(_cacheKey, (config: _config, baseUrl: _config["Sonarr:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
         {
             var apiKey = state.config.GetValueStrict<string>("Sonarr:ApiKey");
             string authHeaderName = state.config["Sonarr:AuthHeaderName"] ?? "X-Api-Key";
@@ -45,20 +45,13 @@ public sealed class SonarrOpenApiHttpClient : ISonarrOpenApiHttpClient
         }, cancellationToken);
     }
 
-    /// <summary>
-    /// Releases resources used by the current instance.
-    /// </summary>
     public void Dispose()
     {
-        _httpClientCache.RemoveSync(nameof(SonarrOpenApiHttpClient));
+        _httpClientCache.RemoveSync(_cacheKey);
     }
 
-    /// <summary>
-    /// Asynchronously releases resources used by the current instance.
-    /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask DisposeAsync()
     {
-        return _httpClientCache.Remove(nameof(SonarrOpenApiHttpClient));
+        return _httpClientCache.Remove(_cacheKey);
     }
 }
