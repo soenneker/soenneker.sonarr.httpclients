@@ -11,6 +11,7 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Sonarr.HttpClients;
 
+/// <inheritdoc cref="ISonarrOpenApiHttpClient" />
 public sealed class SonarrOpenApiHttpClient : ISonarrOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
