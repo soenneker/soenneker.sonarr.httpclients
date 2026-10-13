@@ -30,7 +30,7 @@ public sealed class SonarrOpenApiHttpClient : ISonarrOpenApiHttpClient
     {
         return _httpClientCache.Get(_cacheKey, (config: _config, baseUrl: _config["Sonarr:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
         {
-            var apiKey = state.config.GetValueStrict<string>("Sonarr:ApiKey");
+            var apiKey = state.config.GetStringStrict("Sonarr:ApiKey");
             string authHeaderName = state.config["Sonarr:AuthHeaderName"] ?? "X-Api-Key";
             string authHeaderValueTemplate = state.config["Sonarr:AuthHeaderValueTemplate"] ?? "{token}";
             string authHeaderValue = authHeaderValueTemplate.Replace("{token}", apiKey, StringComparison.Ordinal);
